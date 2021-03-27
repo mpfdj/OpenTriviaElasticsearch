@@ -8,7 +8,7 @@ def convert_data_to_es_bulk_format(input_folder, output_folder, file_name, i):
     output_file = open(output_folder + file_name, "w")
 
     json_array = json.load(input_file)
-    # i = 1
+    i = 1
     for data in json_array:
         action_and_meta_data = {"index": {"_id": "" + str(i) + ""}}
 
@@ -36,7 +36,7 @@ def convert_data_to_es_bulk_format(input_folder, output_folder, file_name, i):
 # Main
 input_folder = "ascii-2/"
 output_folder = "elasticsearch-2/"
-i = 1
+
 for filepath in glob.iglob(input_folder + "*.json"):
     file_name = ntpath.basename(filepath)
 
