@@ -3,22 +3,25 @@ import json
 import ntpath
 
 
-def convert_data_to_es_bulk_format(input_folder, output_folder, file_name):
+def convert_data_to_es_bulk_format(input_folder, output_folder, file_name, i):
     input_file = open(input_folder + file_name)
     output_file = open(output_folder + file_name, "w")
 
     json_array = json.load(input_file)
-    i = 1
+    # i = 1
     for data in json_array:
         action_and_meta_data = {"index": {"_id": "" + str(i) + ""}}
-        # {"question":"Three of these animals hibernate. Which one does not?","answer":"Sloth","choices":["Mouse","Sloth","Frog","Snake"]}
 
         try:
-            optional_source = {"question": data["question"], "type": "multiple-choice", "answer": data["answer"], "choices": data["choices"]}
+            optional_source = {
+                "category": file_name.split(".")[0].replace("_", " "),
+                "question": data["question"],
+                "type": "multiple-choice",
+                "answer": data["answer"],
+                "choices": data["choices"]
+            }
         except:
             continue
-
-        if len(data["choices"]) == 1: optional_source["type"] = "open-ended"
 
         # print(action_and_meta_data)
         # print(data)
@@ -33,9 +36,10 @@ def convert_data_to_es_bulk_format(input_folder, output_folder, file_name):
 # Main
 input_folder = "ascii-2/"
 output_folder = "elasticsearch-2/"
-
+i = 1
 for filepath in glob.iglob(input_folder + "*.json"):
     file_name = ntpath.basename(filepath)
-    print("Converting " + file_name)
-    convert_data_to_es_bulk_format(input_folder, output_folder, file_name)
+
+    print("curl -H \"Content-Type: application/x-ndjson\" -XPOST \"localhost:9200/open-trivia/_bulk?pretty\" --data-binary @" + file_name)
+    convert_data_to_es_bulk_format(input_folder, output_folder, file_name, i)
 
