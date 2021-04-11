@@ -11,18 +11,6 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types
 https://www.elastic.co/guide/en/elasticsearch/reference/7.0/docs-bulk.html
 https://kb.objectrocket.com/elasticsearch/how-to-bulk-import-into-elasticsearch-using-curl
 
-# curl commands
-curl -H "Content-Type: application/x-ndjson" -XPOST "localhost:9200/open-trivia/_bulk?pretty" --data-binary @es-data.json
-
-
-# GET commands for testing
-# Returns the top 10 results
-GET localhost:9200/open-trivia/_doc/1
-GET localhost:9200/open-trivia/_search
-
-# Get indices
-GET localhost:9200/_cat/indices?v=true
-
 # Create index with a mapping
 PUT localhost:9200/open-trivia
 {
@@ -49,6 +37,17 @@ PUT localhost:9200/open-trivia
 
 # Get mapping definition
 GET localhost:9200/open-trivia/_mapping
+
+# Load data in to index
+curl -H "Content-Type: application/x-ndjson" -XPOST "localhost:9200/open-trivia/_bulk?pretty" --data-binary @es-data.json
+
+# GET commands for testing
+# Returns the top 10 results
+GET localhost:9200/open-trivia/_doc/1
+GET localhost:9200/open-trivia/_search
+
+# Get indices
+GET localhost:9200/_cat/indices?v=true
 
 # Example document
 {
